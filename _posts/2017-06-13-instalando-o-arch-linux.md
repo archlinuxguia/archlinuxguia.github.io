@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Instação do Arch Linux"
+title:  "Instalando o Arch Linux"
 date:   2017-06-13 21:55:05 -0400
 categories: instalação
 ---
@@ -277,3 +277,219 @@ Escolha um:
 ~~~
 # swapon /dev/sda2
 ~~~
+
+* __Configurar o espelho:__
+
+~~~
+# cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.old
+~~~
+
+~~~
+# nano /etc/pacman.d/mirrorlist.old
+~~~
+
+>Memorize o endereço do espelho (ou parte dele)
+
+~~~
+# cat /etc/pacman.d/mirrorlist.old | grep arch.localmsp > /etc/pacman.d/mirrorlist
+~~~
+
+>Neste exemplo o espelho escolhido foi:
+>__Server = http://arch.localmsp.org/arch/$repo/os/$arch__
+>Verifique o repositório escolhido:
+
+~~~
+# cat /etc/pacman.d/mirrorlist
+~~~
+
+* __Instalar o sistema base:__
+
+~~~
+# pacstrap -i /mnt base base-devel
+~~~
+
+* __Gerar o fstab:__
+
+~~~
+# genfstab -U /mnt > /mnt/etc/fstab
+~~~
+
+* __Mudar a raiz:__
+
+~~~
+# arch-chroot /mnt /bin/bash
+~~~
+
+* __Alterar a localização:__
+
+~~~
+# nano /etc/locale.gen
+~~~
+
+Atalhos:
+
+| Ctrl + w: | pesquisar palavra |
+| Ctrl + o: | salvar as modificações |
+| Ctrl + x: | sair do editor |
+
+>Pesquise pela string __pt_BR__ para ir direto a linha: `#pt_BR.UTF-8 UTF-8`. Apague o `#` do início da linha, salve e saia do editor.
+
+~~~
+# locale-gen
+~~~
+
+~~~
+# echo LANG=pt_BR.UTF-8 > /etc/locale.conf
+~~~
+
+* __Layout do teclado:__
+
+~~~
+# echo KEYMAP=br-abnt2 > /etc/vconsole.conf
+~~~
+
+* __Fuso horário:__
+
+~~~
+# tzselect
+~~~
+
+~~~
+# ln -s /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+~~~
+
+>Neste exemplo foi definido o horário de São Paulo
+
+~~~
+# hwclock --systohc --utc
+~~~
+
+* __Gerar ambiente ramdisk inicial: (OPCIONAL)__
+
+~~~
+# nano /etc/mkinitcpio.conf
+~~~
+
+~~~
+# mkinitcpio -p linux
+~~~
+
+>Você pode adicionar o HOOK __resume__ após o __udev__, ou acrescentar em MODULES o módulo da sua placa de vídeo __radeon__, __nouveau__ ou __intel_agp i915__ após instalar o driver da mesma.
+
+* __Nome da máquina:__
+
+~~~
+# echo myhostname > /etc/hostname
+~~~
+
+~~~
+# nano /etc/hosts
+~~~
+
+>Mude o nome __myhostname__ com o nome que desejar, depois adicione o mesmo nome às entradas __localhost__ no arquivo __/etc/hosts__
+
+~~~
+127.0.0.1  localhost.localdomain  localhost  myhostname
+::1        localhost.localdomain  localhost  myhostname
+~~~
+
+* __Instalando o Netctl:__
+
+~~~
+# pacman -S wpa_actiond ifplugd dialog
+~~~
+
+>Esses pacotes são necessários para você usar o __wifi-menu__ no sistema instalado.
+
+* __Grub (Legacy):__
+
+~~~
+# pacman -S grub
+~~~
+
+~~~
+# grub-install --recheck --target=i386-pc /dev/sda
+~~~
+
+~~~
+# grub-mkconfig -o /boot/grub/grub.cfg
+~~~
+
+* __Grub (UEFI):__
+
+~~~
+# pacman -S grub efibootmgr
+~~~
+
+~~~
+# grub-install --recheck --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+~~~
+
+~~~
+# grub-mkconfig -o /boot/grub/grub.cfg
+~~~
+
+* __rEFInd (ext4):__
+
+~~~
+# pacman -S refind-efi
+~~~
+
+~~~
+# refind-install --alldrivers
+~~~
+
+* __rEFInd (Btrfs):__
+
+~~~
+# pacman -S refind-efi
+~~~
+
+~~~
+# refind-install --alldrivers
+~~~
+
+~~~
+# nano /boot/EFI/refind/refind.conf
+~~~
+
+>No final do arquivo adicione a seguinte entrada, depois salve as alterações e feche o editor:
+
+~~~
+menuentry "Arch Linux" {
+        icon /EFI/refind/icons/os_arch.png
+        volume Linux
+        loader /@arch/boot/vmlinuz-linux
+        initrd /@arch/boot/initramfs-linux.img
+        options "root=PARTLABEL=Linux rw rootflags=subvol=@arch resume=PARTLABEL=swap"
+        submenuentry "Boot using fallback initramfs" {
+                initrd /@arch/boot/initramfs-linux-fallback.img
+        }
+}
+~~~
+
+* __Definir a senha do usuário root:__
+
+~~~
+# passwd
+~~~
+
+* __Mudar a raiz:__
+
+~~~
+# exit
+~~~
+
+* __Desmontar os sistemas de arquivos:__
+
+~~~
+# umount -R /mnt
+~~~
+
+* __Reiniciar o sistema:__
+
+~~~
+# reboot
+~~~
+
+* __Instalação finalizada!__
