@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
     #echo 'Instalando as gems do projeto...'
     #cd /vagrant && bundle update
     #echo 'Iniciando o Jekyll...'
-    #jekyll serve --host 0.0.0.0 --drafts --detach
+    #jekyll serve --host 0.0.0.0 --drafts --force_polling
     echo 'Tudo pronto!'
   SHELL
 end
