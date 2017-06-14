@@ -12,13 +12,13 @@ Este projeto visa disponibilizar guias para o usuário iniciante na distribuiç�
 2. Clone o repositório
 
 ```
-$ git clone https://github.com/nome-de-usuario/archlinuxguia.github.io
+$ git clone https://github.com/nome-de-usuario/archlinuxguia.github.io archlinuxguia
 ```
 
 3. Rode o Jekyll
 
 ```
-$ cd archlinuxguia.github.io
+$ cd archlinuxguia
 ```
 
 ```
@@ -27,23 +27,35 @@ $ bundle exec jekyll serve --drafts
 
 ### Se não possuir o Ruby instalado, ou preferir usar o mesmo ambiente que o nosso:
 
-1. Instale o VirtualBox
+1. Instale o [VirtualBox com Pacote de Extensões](https://www.virtualbox.org/wiki/Downloads)
 
-2. Instale o Vagrant
+2. Instale o [Vagrant](https://www.vagrantup.com/downloads.html)
 
-3. Inicie o ambiente de desenvolvimento
+3. Crie um fork deste repositório
+
+4. Clone o repositório
+
+```
+$ git clone https://github.com/nome-de-usuario/archlinuxguia.github.io archlinuxguia
+```
+
+5. Inicie o ambiente de desenvolvimento
+
+```
+$ cd archlinuxguia
+```
 
 ```
 $ vagrant up
 ```
 
-4. Conecte-se ao ambiente
+6. Conecte-se ao ambiente
 
 ```
 $ vagrant ssh
 ```
 
-5. Instale o Bundler
+7. Instale o Bundler
 
 ```
 $ gem install bundler
@@ -51,7 +63,7 @@ $ gem install bundler
 
 > Talvez seja necessário sair do ambiente (`$ exit`) e voltar (`$ vagrant ssh`)
 
-6. Rode o Jekyll
+8. Rode o Jekyll
 
 ```
 $ cd /vagrant
