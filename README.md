@@ -25,7 +25,9 @@ $ cd archlinuxguia
 $ bundle exec jekyll serve --drafts
 ```
 
-### Se não possuir o Ruby instalado, ou preferir usar o mesmo ambiente que o nosso:
+### Se não possuir o Ruby instalado, ou preferir usar o mesmo ambiente que o nosso (Vagrant ou Docker/Docker Compose):
+
+#### Vagrant:
 
 1. Instale o [VirtualBox com Pacote de Extensões](https://www.virtualbox.org/wiki/Downloads)
 
@@ -71,4 +73,36 @@ $ cd /vagrant
 
 ```
 $ bundle exec jekyll serve --host 0.0.0.0 --drafts --force_polling
+```
+
+#### Docker:
+
+1. Instale o [VirtualBox com Pacote de Extensões](https://www.virtualbox.org/wiki/Downloads)
+
+2. Instale o [Docker](https://docs.docker.com/engine/installation/)
+
+3. Instale o [Docker Compose](https://docs.docker.com/compose/install/) (Opcional)
+
+4. Crie um fork deste repositório
+
+5. Clone o repositório
+
+```
+$ git clone https://github.com/nome-de-usuario/archlinuxguia.github.io archlinuxguia
+```
+
+6. Inicie o container do Jekyll
+
+```
+$ cd archlinuxguia
+```
+
+```
+$ docker-composer up
+```
+
+ou
+
+```
+$ docker run --rm --label=jekyll --volume=%CD%:/srv/jekyll -it -p 4000:4000 jekyll/jekyll:pages serve --drafts --force_polling
 ```
